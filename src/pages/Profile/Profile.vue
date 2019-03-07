@@ -6,7 +6,7 @@
       <router-link to="./login" class="profile-link">
         <div class="profile_image">
           <!--<i class="iconfont icon-person"></i>-->
-          <span class="item_icon">
+          <span class="item_icon person">
             <svg class="icon svg-icon" aria-hidden="true">
               <use xlink:href="#icon-baocuibinggan"></use>
             </svg>
@@ -106,4 +106,7 @@
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/profile.styl";
+  .person>svg
+    width 100%
+    height 100%
 </style>
