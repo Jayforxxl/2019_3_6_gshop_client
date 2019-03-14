@@ -2,14 +2,21 @@
   <div class="msite">
     <!--首页头部,引入自定义组件HeaderTop-->
     <HeaderTop :title="address.name">
-      <span class="header_search" slot="left">
+      <router-link class="header_search" slot="left" to="/search">
         <svg class="icon svg-icon" aria-hidden="true">
           <use xlink:href="#icon-regou"></use>
         </svg>
-      </span>
-      <span class="header_login" slot="right">
-        <span class="header_login_text">登录|注册</span>
-      </span>
+      </router-link>
+
+      <router-link class="header_login" slot="right" :to=" userInfo._id ? '/userinfo':'/login'">
+        <span class="header_login_text" v-if="!userInfo._id">登录|注册</span>
+        <span class="header_login_text" v-else>
+          <svg class="icon svg-icon" aria-hidden="true">
+            <use xlink:href="#icon-buding"></use>
+          </svg>
+        </span>
+      </router-link>
+
     </HeaderTop>
     <!--首页导航,使用swiper-->
     <nav class="msite_nav">
@@ -55,7 +62,7 @@
       this.$store.dispatch('getCategorys')
     },
     computed: {
-      ...mapState(['address', 'categorys']),
+      ...mapState(['address', 'categorys','userInfo']),
       // 生成二维数组categorysArr
       categorysArr () {
         const {categorys} = this

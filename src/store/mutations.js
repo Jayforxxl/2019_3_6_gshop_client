@@ -27,9 +27,11 @@ export default {
   [RECEIVE_SHOPS] (state, {shops}) {
     state.shops = shops
   },
+  // Vuex书写第二步mutation
   [RECEIVE_USER_INFO] (state, {userInfo}) {
     state.userInfo = userInfo
   },
+  // 初始化用户信息(用于退出登录)
   [RESET_USER_INFO] (state) {
     state.userInfo = {}
   },

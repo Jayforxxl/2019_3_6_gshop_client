@@ -41,7 +41,7 @@
               </section>
               <section class="login_message">
                 <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-                <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha">
+                <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha" ref="captcha">
               </section>
             </section>
           </div>
@@ -117,40 +117,74 @@
           }
         }
       },
-      login(){
+      async login(){
+        let result
         //前端表单验证
         if(this.loginWay){
           //短信登录
           const {rightPhone,phone,code} = this
           if(!this.rightPhone){
             this.showAlert('手机号不正确')
+            return
           }else if(!(/^\d{6}$/.test(code))){
             this.showAlert('验证码不正确')
-          }else{
-            console.log("验证成功")
+            return
           }
+            console.log("验证成功")
+            //发送ajax请求短信登录
+            //await(只能放在asyn里面)让JavaScript进行等待，直到一个promise执行并返回它的结果，JavaScript才会继续往下执行。
+            result = await reqSmsLogin(phone,code)
         }else {
           //密码登录
           const {name,pwd,captcha} = this
           if(!this.name){
             this.showAlert('用户必须指定')
+            return
           }else if(!this.pwd){
             this.showAlert('密码必须指定')
+            return
           }else if(!this.captcha){
             this.showAlert('验证码必须指定')
-          }else{
-            console.log("验证成功")
+            return
           }
+            console.log("验证成功")
+            //发送ajax请求短信登录
+            result = await reqPwdLogin({name,pwd,captcha})
         }
+        //清除定时器
+        if(this.computeTime){
+          this.computeTime= 0
+          clearInterval(this.intervalId)
+          this.intervalId = undefined
+        }
+        //根据请求结果进行处理
+        if(result.code === 0){
+          //请求成功
+          const user = result.data
+          //将user保存到vuex的state中
+          this.$store.dispatch('recordUser',user)
+          //跳转路由到个人中心页面
+          this.$router.replace('./profile')
+        }else {
+          //请求失败
+          //在这里一个细节，在密码登录方式中如果登录失败是要刷新那个验证码
+          //ref 加在普通的元素上，用this.ref.name 获取到的是dom元素
+          this.getCaptcha()
+          const msg = result.msg
+          this.showAlert(msg)
+        }
+
+
+
+
       },
       closeTip(){
-        console.log("closeTip")
         this.alertText = ''
         this.alertShow = false
       },
-      getCaptcha(event){
-        //每次指定的src值需要不一样才能触发
-        event.target.src = 'http://localhost:4000/captcha?time='+Date.now()
+      getCaptcha(){
+        //每次指定的src值需要不一样才能触发,否则不会触发
+        this.$refs.captcha.src = 'http://localhost:4000/captcha?time='+Date.now()
       }
     },
     components:{

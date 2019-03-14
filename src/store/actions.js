@@ -61,12 +61,12 @@ export default {
     }
   },
 
-  // 同步记录用户信息
+  // Vuex书写第四步action(到这里就搞定了)：同步记录用户信息
   recordUser ({commit}, userInfo) {
     commit(RECEIVE_USER_INFO, {userInfo})
   },
 
-  // 异步获取用户信息
+  // 异步获取用户信息(用于一开始进入项目时候显示上次的登录状态)
   async getUserInfo ({commit}) {
     const result = await reqUserInfo()
     if (result.code === 0) {
