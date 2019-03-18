@@ -5,6 +5,8 @@ import router from './router'
 // 注册store
 import store from './store'
 // Vue.config.productionTip = false
+import './mock/mockServer' // 不用写变量名，因为mockServer没有export
+
 // 导入mint-ui中的按钮组件
 import {Button} from 'mint-ui'
 // 注册全局组件标签

@@ -83,6 +83,7 @@ export default {
     }
   },
 
+  // mock模拟出来的数据也进行Vuex管理
   // 异步获取商家信息
   async getShopInfo ({commit}) {
     const result = await reqShopInfo()
