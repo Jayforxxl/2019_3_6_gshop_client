@@ -110,7 +110,8 @@ export default {
     if (result.code === 0) {
       const goods = result.data
       commit(RECEIVE_GOODS, {goods})
-      // 数据更新了, 通知一下组件
+      // 数据更新了, 通知一下组件(不使用watch的形式，之前首页创建swiper的时候用到watch的形式)
+      // 这样写的原因是因为有可能不传这个函数，没传的话应该是不执行，否则会报错
       callback && callback()
     }
   },
